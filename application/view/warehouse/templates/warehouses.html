@@ -1,0 +1,9 @@
+<tbody>
+    <h1>Warehouse List</h1>
+    <div>
+      {% for warehouse in warehouses %}
+      <li><a href="{{warehouse['id']}}">{{warehouse['id']}} : {{warehouse['name']}} </a></li>
+      </div>
+      {% endfor %}
+    </div>
+</tbody>
