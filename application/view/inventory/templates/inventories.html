@@ -1,0 +1,25 @@
+<table>
+    <tr>
+      <th>Inventory ID</th>
+      <th>Inventory Name</th>
+      <th>Price</th> 
+      <th>Amount</th>
+      <th>Not Allocated</th>
+      <th>Last Update</th>
+      <th>Edit</th>
+      <th>Delete</th>
+
+    </tr>
+    {% for inventory in all_inventories %}
+    <tr>
+      <td>{{inventory['id']}}</td>
+      <td>{{inventory['name']}}</td>
+      <td>{{inventory['price']}}</td>
+      <td>{{inventory['amount']}}</td>
+      <td>{{inventory['not_allocated']}}</td>
+      <td>{{inventory['updated_time']}}</td>
+      <td><a href="http://localhost:8000/inventories/{{inventory['id']}}/edit">edit</a></td>
+      <td><a href="http://localhost:8000/inventories/{{inventory['id']}}/delete">delete</a></td>
+    </tr>
+    {% endfor %}
+  </table>

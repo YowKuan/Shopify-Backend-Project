@@ -33,10 +33,12 @@ def init_app():
         #Import routes
         from .view.home import home
         from .view.warehouse import warehouse
+        from .view.inventory import inventory
         
         #Register Blueprints
         app.register_blueprint(home.home_bp)
         app.register_blueprint(warehouse.warehouse_bp)
+        app.register_blueprint(inventory.inventory_bp)
         
         #Register API resources 
         

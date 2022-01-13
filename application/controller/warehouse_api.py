@@ -40,7 +40,9 @@ class WarehouseAPI(Resource):
         warehouse.name = data['name']
         warehouse.address = data['address']
         warehouse.capacity = data['capacity']
-        warehouse.updated_time = data['updated_time']
+
+        warehouse.updated_time = datetime.now.strftime("%Y-%m-%d %H:%M:%S")
+        db.session.commit()
         
         return
     
@@ -48,8 +50,12 @@ class WarehouseAPI(Resource):
         has_item = has.query.filter_by(w_id=w_id, i_id=i_id)
         if has_item:
             has_item.amount += add_amount
-            db.session.commit
+            db.session.commit()
             return "amount updated"
+        new_item = has(w_id=w_id, i_id=i_id, amount=add_amount)
+        db.add(new_item)
+        db.session.commit()
+        return "added new inventory to warehouse"
         
     def delete(self, id):
         warehouse = Warehouse.query.filter_by(id = id).first()

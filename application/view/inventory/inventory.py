@@ -1,21 +1,44 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request, redirect, url_for
 from flask import current_app as app
-from application.controller.inventory_api import fetch_products
+import requests
+from application.controller.inventory_api import InventoriesAPI, InventoryAPI
 
+
+API_inventories = InventoriesAPI()
+API_inventory = InventoryAPI()
 
 # Blueprint Configuration
-home_bp = Blueprint(
-    'home_bp', __name__,
+inventory_bp = Blueprint(
+    'inventory_bp', __name__,
     template_folder='templates',
+    url_prefix='/inventories'
 )
 
 
-@home_bp.route('/', methods=['GET'])
-def home():
-    """Homepage."""
+@inventory_bp.route('/', methods=['GET'])
+def inventories_all():
+    all_inventories = API_inventories.get()
     return render_template(
-        'index.html',
-        title='Shopify Backend Challenge',
-        subtitle='Following Best Practices to build Scalable Web Applications.',
-        template='home-template',
+        'inventories.html',
+        all_inventories=all_inventories,
     )
+
+
+@inventory_bp.route('/<id>/edit', methods=['GET'])
+def Inventory_edit(id):
+    inventory = API_inventory.get(id)
+    return render_template(
+        'inventory_edit.html',
+        inventory=inventory,
+    )
+    
+@inventory_bp.route('/edit/submit', methods=['POST'])
+def Inventory_edit_submit():
+    data = request.form
+    API_inventory.put(data['id'], data)
+    return redirect(url_for('inventory_bp.inventories_all'))
+
+@inventory_bp.route('/<id>/delete', methods=['GET'])
+def Inventory_delete(id):
+    inventory = API_inventory.delete(id)
+    return redirect(url_for('inventory_bp.inventories_all'))
