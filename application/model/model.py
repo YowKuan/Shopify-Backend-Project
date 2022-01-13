@@ -11,13 +11,15 @@ class Warehouse(db.Model):
     name = db.Column(db.String(200))
     address = db.Column(db.String(200))
     capacity = db.Column(db.Integer, nullable=False)
-    created_time = db.Column(db.Date)
+    created_time = db.Column(db.DateTime)
+    updated_time = db.Column(db.DateTime)
     
     def __init__(self, name, address, capacity, created_time):
         self.name = name
         self.address = address
         self.capacity = capacity
         self.created_time = created_time
+        self.updated_time = created_time
     
     holds = db.relationship('Inventory', secondary=has, lazy='subquery',
         backref=db.backref('warehouse', lazy=True))
@@ -27,9 +29,13 @@ class Inventory(db.Model):
     name = db.Column(db.String(200), nullable=False)
     price = db.Column(db.Float, nullable=False)
     amount = db.Column(db.Integer, nullable=False)
+    not_allocated = db.Column(db.Integer, nullable=False)
+    updated_time = db.Column(db.DateTime)
     
-    def __init__(self, name, price, amount):
+    def __init__(self, name, price, amount, updated_time):
         self.name = name
         self.price = price
         self.amount = amount
+        self.not_allocated = amount
+        self.updated_time = updated_time
     

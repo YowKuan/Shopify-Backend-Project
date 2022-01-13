@@ -14,37 +14,44 @@ class InventoriesAPI(Resource):
         return [{'id': inventory.id, 
                  'name': inventory.name, 
                  'price':inventory.price,
-                 'amount': inventory.amount} for inventory in Inventories]
+                 'amount': inventory.amount,
+                 'not_allocated': inventory.not_allocated} for inventory in Inventories]
 
     def post(self):
         print(request.data)
+        
+        now = datetime.now()
+        dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
 
         data = request.get_json(force=True)
         print(data)
-        new_warehouse = Inventory(data['name'], data['price'], data['amount'])
-        db.session.add(new_warehouse)
+        new_inventory = Inventory(data['name'], data['price'], data['amount'], data['amount'], dt_string)
+        db.session.add(new_inventory)
         db.session.commit()
-        return "suceess"
+        return "success"
 
 
 class InventoryAPI(Resource):
     def get(self, id):
-        warehouse = Inventory.query.filter_by(id = id).first()
-        print(warehouse)
-        return warehouse
+        inventory = Inventory.query.filter_by(id = id).first()
+        print(inventory)
+        return inventory
     
     def put(self, id):
         data = request.get_json(force=True)
-        warehouse = Inventory.query.filter_by(id = id).first()
-        warehouse.name = data['name']
-        warehouse.price = data['price']
-        warehouse.amount = data['amount']
+        inventory = Inventory.query.filter_by(id = id).first()
+        inventory.name = data['name']
+        inventory.price = data['price']
+        inventory.amount = data['amount']
+        now = datetime.now()
+        dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
+        inventory.updated_time = dt_string
         db.session.commit()
         return "success"
     
     def delete(self, id):
-        warehouse = Inventory.query.filter_by(id = id).first()
-        db.session.delete(warehouse)
+        inventory = Inventory.query.filter_by(id = id).first()
+        db.session.delete(inventory)
         db.session.commit()
         
     

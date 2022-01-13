@@ -34,4 +34,25 @@ class WarehouseAPI(Resource):
         print(warehouse)
         return warehouse
     
+    def put(self, id):
+        data = request.get_json(force=True)
+        warehouse = Warehouse.query.filter_by(id=id)
+        warehouse.name = data['name']
+        warehouse.address = data['address']
+        warehouse.capacity = data['capacity']
+        warehouse.updated_time = data['updated_time']
+        
+        return
     
+    def put(self, w_id, i_id, add_amount):
+        has_item = has.query.filter_by(w_id=w_id, i_id=i_id)
+        if has_item:
+            has_item.amount += add_amount
+            db.session.commit
+            return "amount updated"
+        
+    def delete(self, id):
+        warehouse = Warehouse.query.filter_by(id = id).first()
+        db.session.delete(warehouse)
+        db.session.commit()
+        
