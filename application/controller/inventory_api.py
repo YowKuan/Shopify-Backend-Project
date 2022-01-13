@@ -19,14 +19,10 @@ class InventoriesAPI(Resource):
                  'not_allocated': inventory.not_allocated,
                  'updated_time': inventory.updated_time} for inventory in Inventories]
 
-    def post(self):
-        print(request.data)
-        
+    def post(self, data):
         now = datetime.now()
         dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
 
-        data = request.get_json(force=True)
-        print(data)
         new_inventory = Inventory(data['name'], data['price'], data['amount'], dt_string)
         db.session.add(new_inventory)
         db.session.commit()

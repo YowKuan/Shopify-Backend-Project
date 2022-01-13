@@ -23,6 +23,18 @@ def inventories_all():
         all_inventories=all_inventories,
     )
 
+@inventory_bp.route('/new', methods=['GET'])
+def inventories_new():
+    return render_template(
+        'inventories_new.html',
+    )
+
+@inventory_bp.route('/new/submit', methods=['POST'])
+def Inventory_new_submit():
+    data = request.form
+    API_inventories.post(data)
+    return redirect(url_for('inventory_bp.inventories_all'))
+
 
 @inventory_bp.route('/<id>/edit', methods=['GET'])
 def Inventory_edit(id):
