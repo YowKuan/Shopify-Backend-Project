@@ -9,7 +9,7 @@ api = Api()
 
 ### Important: Need to import after initialize db instance to avoid circular import 
 from application.model import Model
-from application.controller.warehouse_api import WarehousesAPI, WarehouseAPI
+from application.controller.warehouse_api import WarehousesAPI, WarehouseAPI, WareInventAPI
 from application.controller.inventory_api import InventoriesAPI, InventoryAPI
 
 
@@ -25,6 +25,7 @@ def init_app():
     api.add_resource(WarehouseAPI, '/api/warehouse/<id>')
     api.add_resource(InventoriesAPI, '/api/inventories')
     api.add_resource(InventoryAPI, '/api/inventory')
+    api.add_resource(WareInventAPI, '/api/wareinvent')
     api.init_app(app)
     model = Model(app)
     

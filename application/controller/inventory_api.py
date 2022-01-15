@@ -5,7 +5,7 @@ from datetime import datetime
 import json
 
 from application import db
-from application.model.model import Inventory
+from application.model.model import Inventory, Has
 
 class InventoriesAPI(Resource):
     def get(self):
@@ -32,16 +32,24 @@ class InventoriesAPI(Resource):
 class InventoryAPI(Resource):
     def get(self, id):
         inventory = Inventory.query.filter_by(id = id).first()
-        print(inventory)
         return inventory
     
     def put(self, id, data):
         inventory = Inventory.query.filter_by(id = id).first()
         old_amount = inventory.amount
+        print("old amount", old_amount)
+        allocated = inventory.amount -inventory.not_allocated
+        
+        #Handle event when new amount is less than amount already allocated to warehouse
+        if int(data['amount']) < allocated:
+            return "New amount is less than amount allocated"
+        
         inventory.name = data['name']
         inventory.price = float(data['price'])
+            
         inventory.amount = int(data['amount'])
         inventory.not_allocated += (inventory.amount-old_amount)
+        print("old amount", old_amount)
         now = datetime.now()
         dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
         inventory.updated_time = dt_string

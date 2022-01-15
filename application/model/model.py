@@ -1,30 +1,50 @@
 from application import db
 
-has = db.Table('has',
-    db.Column('w_id', db.Integer, db.ForeignKey('warehouse.id'), primary_key=True),
-    db.Column('i_id', db.Integer, db.ForeignKey('inventory.id'), primary_key=True),
-    db.Column('amount', db.Integer)
-)
+class Has(db.Model):
+    __tablename__ = 'has'
+
+    w_id = db.Column(db.ForeignKey('warehouse.id'), primary_key=True)
+    i_id = db.Column(db.ForeignKey('inventory.id'), primary_key=True)
+    amount = db.Column(db.String(50))
+    
+    def __init__(self, w_id, i_id, amount):
+        self.w_id = w_id
+        self.i_id = i_id
+        self.amount = amount
+
+    # child = db.relationship("Child", backref="parent_associations")
+    # parent = db.relationship("Parent", backref="child_associations")
+
+# has = db.Table('has',
+#     db.Column('w_id', db.Integer, db.ForeignKey('warehouse.id'), primary_key=True),
+#     db.Column('i_id', db.Integer, db.ForeignKey('inventory.id'), primary_key=True),
+#     db.Column('amount', db.Integer)
+# )
 
 class Warehouse(db.Model):
+    __tablename__ = 'warehouse'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200))
     address = db.Column(db.String(200))
     capacity = db.Column(db.Integer, nullable=False)
+    current_load = db.Column(db.Integer)
+    #inventories = db.relationship("Inventory", secondary=has, backref=db.backref("warehouse", lazy="joined"))
     created_time = db.Column(db.DateTime)
     updated_time = db.Column(db.DateTime)
     
-    def __init__(self, name, address, capacity, created_time):
+    def __init__(self, name, address, capacity, created_time, current_load):
         self.name = name
         self.address = address
         self.capacity = capacity
         self.created_time = created_time
         self.updated_time = created_time
+        self.current_load = current_load
     
-    holds = db.relationship('Inventory', secondary=has, lazy='subquery',
+    holds = db.relationship('Inventory', secondary='has', lazy='subquery',
         backref=db.backref('warehouse', lazy=True))
 
 class Inventory(db.Model):
+    __tablename__ = 'inventory'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     price = db.Column(db.Float, nullable=False)
