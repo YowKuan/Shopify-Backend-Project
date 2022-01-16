@@ -7,6 +7,8 @@ This project implements a inventory tracking application for a logistic company.
 
 - Ability to create warehouses/locations and assign inventory to specific locations
 
+### Database Schema
+![Alt text](db_schema.png "Title")
 
 ### Tech Stack
 
