@@ -5,7 +5,7 @@ class Has(db.Model):
 
     w_id = db.Column(db.ForeignKey('warehouse.id'), primary_key=True)
     i_id = db.Column(db.ForeignKey('inventory.id'), primary_key=True)
-    amount = db.Column(db.String(50))
+    amount = db.Column(db.Integer)
     
     def __init__(self, w_id, i_id, amount):
         self.w_id = w_id

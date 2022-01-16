@@ -32,9 +32,13 @@ class WarehouseAPI(Resource):
         warehouse = Warehouse.query.filter_by(id = id).first()
         
         #using group by on Has table to fetch all current load 
-        load_info = db.session.query(db.func.sum(Has.amount)).filter_by(w_id=id).group_by(Has.w_id).first()
+        #load_info = db.session.query(db.func.sum(Has.amount)).filter_by(w_id=id).group_by(Has.w_id).first()
+        load_info = db.session.query((Has.amount)).filter_by(w_id=id).all()
+        
         if load_info:
-            warehouse.current_load = load_info[0]
+            print(load_info)
+            load_info = sum([int(num[0]) for num in load_info])
+            warehouse.current_load = load_info
         else:
             warehouse.current_load = 0
         db.session.commit()
@@ -78,6 +82,7 @@ class WareInventAPI(Resource):
         
         print(has_item)
         if has_item:
+            has_item.amount = int(has_item.amount)
             if has_item.amount + add_amount > 0:
                 inventory.not_allocated -= add_amount
                 has_item.amount += add_amount
