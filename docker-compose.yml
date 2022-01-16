@@ -9,7 +9,7 @@ services:
       
     image: postgres:12.9-bullseye
     ports:
-      - "5432:5432"
+      - "5478:5432"
     restart: always
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
