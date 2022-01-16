@@ -12,15 +12,6 @@ class Has(db.Model):
         self.i_id = i_id
         self.amount = amount
 
-    # child = db.relationship("Child", backref="parent_associations")
-    # parent = db.relationship("Parent", backref="child_associations")
-
-# has = db.Table('has',
-#     db.Column('w_id', db.Integer, db.ForeignKey('warehouse.id'), primary_key=True),
-#     db.Column('i_id', db.Integer, db.ForeignKey('inventory.id'), primary_key=True),
-#     db.Column('amount', db.Integer)
-# )
-
 class Warehouse(db.Model):
     __tablename__ = 'warehouse'
     id = db.Column(db.Integer, primary_key=True)
