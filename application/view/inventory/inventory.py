@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask import current_app as app
 import requests
 from application.controller.inventory_api import InventoriesAPI, InventoryAPI
@@ -32,7 +32,8 @@ def inventories_new():
 @inventory_bp.route('/new/submit', methods=['POST'])
 def Inventory_new_submit():
     data = request.form
-    API_inventories.post(data)
+    return_message = API_inventories.post(data)
+    flash(return_message)
     return redirect(url_for('inventory_bp.inventories_all'))
 
 

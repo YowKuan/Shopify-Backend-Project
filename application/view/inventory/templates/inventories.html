@@ -2,6 +2,16 @@
 <h2>You can edit, delete existing inventory</h2>
 <h2>Or click "Add new Inventory" to create a new one</h2>
 
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
 <table>
     <tr>
       <th>Inventory ID</th>

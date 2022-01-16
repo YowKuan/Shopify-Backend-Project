@@ -21,7 +21,10 @@ class WarehousesAPI(Resource):
     def post(self, data):
         now = datetime.now()
         dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
-        new_warehouse = Warehouse(data['name'], data['address'], data['capacity'], dt_string, 0)
+        if data['capacity'] and int(data['capacity']) > 0:
+            new_warehouse = Warehouse(data['name'], data['address'], data['capacity'], dt_string, 0)
+        else:
+            return "capacity must larger than 0"
         db.session.add(new_warehouse)
         db.session.commit()
         return "suceess"

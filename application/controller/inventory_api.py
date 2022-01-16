@@ -22,8 +22,11 @@ class InventoriesAPI(Resource):
     def post(self, data):
         now = datetime.now()
         dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
-
-        new_inventory = Inventory(data['name'], data['price'], data['amount'], dt_string)
+        
+        if data['price'] and data['amount'] and int(data['price']) > 0 and int(data['amount']) > 0:
+            new_inventory = Inventory(data['name'], data['price'], data['amount'], dt_string)
+        else:
+            return "price and amount cannot be smaller than zero"
         db.session.add(new_inventory)
         db.session.commit()
         return "success"

@@ -1,5 +1,5 @@
 from application.view.inventory.inventory import API_inventories
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask import current_app as app
 
 from application.controller.warehouse_api import WarehousesAPI, WarehouseAPI, WareInventAPI
@@ -37,7 +37,8 @@ def warehouses_new():
 @warehouse_bp.route('/new/submit', methods=['POST'])
 def Warehouse_new_submit():
     data = request.form
-    API_warehouses.post(data)
+    return_message = API_warehouses.post(data)
+    flash(return_message)
     return redirect(url_for('warehouse_bp.warehouses'))
 
 @warehouse_bp.route('/<id>/edit', methods=['GET'])
